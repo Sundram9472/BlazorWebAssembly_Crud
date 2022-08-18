@@ -1,0 +1,84 @@
+﻿@page "/edit/{EmpId:int}"
+
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@using BlazorWebAssembly_Crud.Shared.Models
+
+<hr />
+<EditForm Model="@Emp" OnValidSubmit="SaveUser">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Emp.EmpName" />
+        </div>
+        <ValidationMessage For="@(() => Emp.EmpName)" />
+    </div>
+    <div class="mb-3">
+        <label for="Address" class="form-label">LastName</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Emp.EmpLastName" />
+        </div>
+        <ValidationMessage For="@(() => Emp.EmpLastName)" />
+    </div>
+    <div class="mb-3">
+        <label for="Cellnumber" class="form-label">Team</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Emp.Team" />
+        </div>
+        <ValidationMessage For="@(() => Emp.Team)" />
+    </div>
+    <div class="mb-3">
+        <label for="Emailid" class="form-label">E-mail</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Emp.Gmail" />
+        </div>
+        <ValidationMessage For="@(() => Emp.Gmail)" />
+    </div>
+     <div class="mb-3">
+        <label for="Emailid" class="form-label">Project</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Emp.AssignProject" />
+        </div>
+        <ValidationMessage For="@(() => Emp.AssignProject)" />
+    </div>
+     <div class="mb-3">
+        <label for="Emailid" class="form-label">Project Remark</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Emp.ProjectRemark" />
+        </div>
+        <ValidationMessage For="@(() => Emp.ProjectRemark)" />
+    </div>
+     <div class="mb-3">
+        <label for="Emailid" class="form-label">Project Status</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Emp.ProjectStatus" />
+        </div>
+        <ValidationMessage For="@(() => Emp.ProjectStatus)" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code{
+        [Parameter]
+        public int EmpId { get; set; }
+        protected Employee Emp; 
+        protected override async Task OnParametersSetAsync()
+        {
+           Emp = await Http.GetFromJsonAsync<Employee>("EmployeeMange/" + EmpId);
+        }
+
+        protected async Task SaveUser()
+        {
+          await Http.PutAsJsonAsync("EmployeeMange", Emp);
+        }
+        
+
+        public void Cancel()
+        {
+            NavigationManager.NavigateTo("Emp");
+        }
+}

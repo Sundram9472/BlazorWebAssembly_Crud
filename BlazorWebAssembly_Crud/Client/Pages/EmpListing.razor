@@ -1,0 +1,69 @@
+﻿@page "/Emp"
+
+@using BlazorWebAssembly_Crud.Shared.Models
+@inject HttpClient Http
+<PageTitle>Counter</PageTitle>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <a href='AddEmployee' class="btn btn-primary" role="button">
+            <i class="fas fa-user-plus"></i>
+            Add User
+        </a>
+    </div>
+</div>
+<br />
+
+@if (Employees == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <table class="table table-striped align-middle table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Team</th>
+                <th>Gmail</th>
+                <th>Assign Project</th>
+                <th>Project Status</th>
+                <th>Project Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in Employees)
+            {
+                <tr>
+                    <td>@emp.EmpName</td>
+                    <td>@emp.EmpLastName</td>
+                    <td>@emp.Team</td>
+                    <td>@emp.Gmail</td>
+                    <td>@emp.AssignProject</td>
+                    <td>@emp.ProjectStatus</td>
+                    <td>@emp.ProjectRemark</td>
+                    <td>
+                        <a href='edit/@emp.EmpId' class="btn btn-outline-dark" role="button">
+                            Edit
+                        </a>
+                        <a href='delete/@emp.EmpId' class="btn btn-outline-danger" role="button">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    protected Employee[]? Employees;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Employees = await Http.GetFromJsonAsync<Employee[]>("EmployeeMange");
+    }
+}
